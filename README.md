@@ -4,7 +4,6 @@ there are several branches in this git for floorplan:
 
 1. [Gen_patten_for_yannis_check](https://github.com/EasonNgan/floorplan/tree/Gen_patten_for_yannis_check)
 2. [Change_floor&unit_planpattern](https://github.com/EasonNgan/floorplan/tree/Change_floor%26unit_planpattern)
-3. [抽成交](https://github.com/EasonNgan/floorplan/tree/抽成交)
 
 ### Change_floor&unit_planpattern
 
