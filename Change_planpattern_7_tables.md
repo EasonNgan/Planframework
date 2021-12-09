@@ -4,7 +4,7 @@
 
 1. update the combine floor (47  > 47-48 where statement) [Ref_code](#update floor)
 2. delete old floor (48) [Ref_code](#delete floorplan data)
-3. delete related table data (FloorplanpatternCenbldg, patternPlanimage, FloorPlanPattern) [Ref_code](#delete related table)
+3. delete related table data (FloorplanpatternCenbldg, FloorPlanPattern) [Ref_code](#delete related table)
 
 #### Unit
 
@@ -16,61 +16,51 @@
 ```sql
   --==================================================UP=============================================================================--
 update [PlanFramework].[dbo].[UnitPlanPattern]
-  set [FloorDesc_c] = N'1樓', [FloorDesc_s] = N'1楼', [FloorDesc_e] = N'1/F', endfloor = 1 , startfloor = 1
+  set [FloorDesc_c] = N'35樓', [FloorDesc_s] = N'35楼', [FloorDesc_e] = N'35/F', startfloor = 35, endfloor = 35
   --select * from [PlanFramework].[dbo].[unitPlanPattern]
-  where estatename_c = N'爾巒' and buildingname_c like N'%茵娜大道 8座%' and flat_c = N'C室'
-  order by buildingname_c, flat_e, floordesc_c
+  where estatename_c = N'喜雅'  and flat_c in (N'A室', N'B室', N'C室') and floordesc_e in (N'35/F-36/F')
+  --where patternid in()
+  order by patternid, phasename_c, buildingname_c, flat_e, floordesc_c
 
-  update Unitplanpattern
-  set [FloorDesc_c] = N'1樓', [FloorDesc_s] = N'1楼', [FloorDesc_e] = N'1/F', endfloor = 1 , startfloor = 1
-  where patternid in (53234)
-  
-  insert into unitplanpatternplanimage values (106069, 102794)
+  insert into unitplanpatternplanimage values (
 
   select * from UnitplanpatternPlanimage
-  where imgid in()
-
-  select * from unitplanpatternplanimage
-  where patternid in()
+  where imgid in ()
+  order by imgid
 
   update unitplanpatternplanimage
-  set imgid = 102799
+  set imgid = 116213
   --select * from Unitplanpatternplanimage
-  where patternid in(21997)
+  where patternid in(82620)
 
   select * from planimage order by imgid desc
   insert into [PlanFramework].[dbo].[PlanImage] (PlanType, CreateDate, flagdeleted)
   values ('UP', getdate(), 0)
-
+  GO 
 
   --==================================================FP=============================================================================--
-
 update [PlanFramework].[dbo].[floorPlanPattern]
-  set [FloorDesc_c] = N'UG樓至地下', [FloorDesc_s] = N'UG楼至地下', [FloorDesc_e] = N'UG/F-G/F' --, endfloor = 8 , startfloor = 7
+  set [FloorDesc_c] = N'1樓至3樓', [FloorDesc_s] = N'1?至3?', [FloorDesc_e] = N'1/F-3/F', startfloor = 1, endfloor = 3
   --select * from [PlanFramework].[dbo].[floorPlanPattern]
-  where estatename_c = N'爾巒' and buildingname_c like N'%茵娜大道%' and floordesc_c = N'UG樓'
-  order by buildingname_c, flat_e, floordesc_
+  where estatename_c = N'翠竹花園' and buildingname_c in (N'5座', N'7座') and floordesc_e in (N'1/F-2/F') --and flat_c in (N'C室', N'M室') and floordesc_e in (N'1/F-27/F')
+  --where patternid in()
+  order by patternid, phasename_c, buildingname_c, floordesc_c
 
-  update floorplanpattern
-  set [FloorDesc_c] = N'1樓', [FloorDesc_s] = N'1楼', [FloorDesc_e] = N'1/F', endfloor = 1 , startfloor = 1
-  where patternid = 53231
+  insert into floorplanpatternplanimage values (
 
-  insert into floorplanpatternplanimage values (21887, 102780)
-  
-  select * from [PlanFramework].[dbo].[floorPlanPattern]
-  where patternid in (21893)
-
-  select * from floorplanpatternPlanimage
-  where imgid = 32612
+  select * from floorplanpatternplanimage
+  where imgid in ()
+  order by imgid
 
   update floorplanpatternplanimage
-  set imgid = 102798
+  set imgid = 79449
   --select * from floorplanpatternplanimage
-  where patternid in()
+  where patternid in (10372)
 
   select * from planimage order by imgid desc
   insert into [PlanFramework].[dbo].[PlanImage] (PlanType, CreateDate, flagdeleted)
   values ('FP', getdate(), 0)
+  GO 7
 ```
 
 
@@ -79,21 +69,24 @@ update [PlanFramework].[dbo].[floorPlanPattern]
 
 ```sql
    --==================================================DELETE_UP=============================================================================--
- SELECT *
+
+select * 
+--delete b
   FROM [PlanFramework].[dbo].[UnitPlanPattern] a
   inner join [dbo].[UnitPlanPatternPlanimage] b on a.PatternID = b.PatternID
   --inner join [dbo].[UnitPlanPatternCenunit] b on a.PatternID = b.PatternID
   inner join [dbo].[Planimage] c on b.ImgID = c.ImgID 
-  where EstateName_c = N'GRAND AUSTIN' 
- 
+  where a.patternid in ()
+
    --==================================================DELETE_FP=============================================================================--
  
- SELECT *
+select *
+--delete b
   FROM [PlanFramework].[dbo].[FloorPlanPattern] a
   inner join [dbo].[FloorPlanPatternPlanimage] b on a.PatternID = b.PatternID
   --inner join [dbo].[FloorPlanPatternCenbldg] b on a.PatternID = b.PatternID
-  inner join [dbo].[Planimage] c on b.ImgID = c.ImgID 
-  where EstateName_c = N'GRAND AUSTIN'
+  inner join [dbo].[Planimage] c on b.ImgID = c.ImgID
+  where a.patternid in ()
 ```
 
 Step: 
@@ -112,24 +105,13 @@ Step:
 ## Remap unitplanpatterncenunit
 
 ```sql
-  --==================================================REMAP CENUNIT=============================================================================--
-select * 
+select b.* 
 --delete b
-from UnitPlanPattern a inner join UnitplanpatternCenunit b on a.PatternID = b.PatternID where EstateName_c in (N'東環')
-
--- Map cenunit which have G in y_axis
-with t1 as (select b.c_estate, b.c_phase, b.c_property, b.cblgcode,
-  a.cuntcode,a.x_axis,a.y_axis from three..cenunit a inner join three..cenbldg b on a.cblgcode = b.cblgcode where c_estate in (N'東環') and a.y_axis like '%G%')
-  --insert into UnitplanpatternCenunit(patternid,cuntcode)
-  select distinct patternid,cuntcode from UnitPlanPattern a inner join t1 on a.EstateName_c = t1.c_estate and isnull(a.PhaseName_c,'') = isnull(t1.c_phase,'') 
-  and a.BuildingName_c = t1.c_property
-  and a.floordesc_e = t1.y_axis
-  and a.Flat_e = t1.x_axis
-  where EstateName_c in (N'東環')
+from UnitPlanPattern a inner join UnitplanpatternCenunit b on a.PatternID = b.PatternID where estatename_c = N'家壹' or buildingname_c = N'家壹'
 
 -- Map cenunit which y_axis only contain number
 ;with t1 as (select b.c_estate, b.c_phase, b.c_property, b.cblgcode,
-  a.cuntcode,a.x_axis,a.y_axis from three..cenunit a inner join three..cenbldg b on a.cblgcode = b.cblgcode where c_estate in (N'東環'))
+  a.cuntcode,a.x_axis,a.y_axis from three..cenunit a inner join three..cenbldg b on a.cblgcode = b.cblgcode where c_estate in (N'家壹') or c_property in (N'家壹'))
   --insert into UnitplanpatternCenunit(patternid,cuntcode)
   select distinct patternid,cuntcode from UnitPlanPattern a inner join t1 on a.EstateName_c = t1.c_estate and isnull(a.PhaseName_c,'') = isnull(t1.c_phase,'') 
   and a.BuildingName_c = t1.c_property
@@ -137,23 +119,34 @@ with t1 as (select b.c_estate, b.c_phase, b.c_property, b.cblgcode,
   and case when y_axis not like '%G%' then cast(replace(trim(t1.y_axis),'/F','') as int) end >= a.startfloor 
   and case when y_axis not like '%G%' then cast(replace(trim(t1.y_axis),'/F','') as int) end <= a.endFloor
   and a.Flat_e = t1.x_axis
-  where EstateName_c in (N'東環')
+  where estatename_c = N'家壹' or buildingname_c = N'家壹'
+
+-- Map cenunit which have G in y_axis
+;with t1 as (select b.c_estate, b.c_phase, b.c_property, b.cblgcode,
+  a.cuntcode,a.x_axis,a.y_axis from three..cenunit a inner join three..cenbldg b on a.cblgcode = b.cblgcode 
+  where (c_estate in (N'家壹') or c_property in (N'家壹')) and a.y_axis like '%G%')
+  --insert into UnitplanpatternCenunit(patternid,cuntcode)
+  select distinct patternid,cuntcode from UnitPlanPattern a inner join t1 on a.EstateName_c = t1.c_estate and isnull(a.PhaseName_c,'') = isnull(t1.c_phase,'') 
+  and a.BuildingName_c = t1.c_property
+  and substring(a.floordesc_e, 1, 3) = t1.y_axis
+  and a.Flat_e = t1.x_axis
+  where estatename_c = N'家壹' or buildingname_c = N'家壹'
 ```
 
 ## Remap floorplanpatterncenbldg
 
 ```sql
-  --==================================================REMAP CENBLDG=============================================================================--
-select *
+--==================================================REMAP CENBLDG=============================================================================--
+select b.*
 --delete b
-from FloorPlanPattern a inner join FloorplanpatternCenbldg b on a.PatternID = b.PatternID where EstateName_c in (N'東環')
+from FloorPlanPattern a inner join FloorplanpatternCenbldg b on a.PatternID = b.PatternID where estatename_c = N'家壹' or buildingname_c = N'家壹'
 
 ;with t1 as (select b.c_estate, b.c_phase, b.c_property, b.cblgcode
- from three..cenbldg b where c_estate in (N'東環'))
+ from three..cenbldg b where c_estate in (N'家壹') or c_property in (N'家壹'))
   --insert into floorplanpatterncenbldg(patternid,cblgcode)
-  select distinct patternid,cblgcode from floorPlanPattern a 
+  select distinct patternid,cblgcode from floorPlanPattern	a 
   inner join t1 on a.EstateName_c = t1.c_estate 
   and isnull(a.PhaseName_c,'') = isnull(t1.c_phase,'') 
   and a.BuildingName_c = t1.c_property
-  where EstateName_c in (N'東環')
+  where estatename_c = N'家壹' or buildingname_c = N'家壹'
 ```
