@@ -9,11 +9,11 @@ there are several branches in this git for floorplan:
 
 - Change_planpattern_7_tables
 
-  some sql for you to change the floorplanpatten and unitplanpattern
+  some sql for you to change the floorplanpatten, unitplanpattern and planimage
 
 - Imageid_list_change_for_floorplan
 
-  steps for changing google drive imageid list
+  steps for changing google drive imageid list and generate imgid sql
 
 - Restore_specific_patternid_floorplan
 
@@ -27,4 +27,14 @@ there are several branches in this git for floorplan:
 
 - 3_places_to_change
 
-  3 places to change if you done generated floorplanpattern 
+  3 places to change if you done generated temp_floorplanpattern or temp_unitplanpattern
+
+### Raw_pattern insert and checking
+
+- Pattern_checking
+  
+  script for checking and changing raw_floorplan or raw_unitpattern
+  
+- Unit_explosion_from_rawfloorplan_unhandled
+
+  insert into temp_unitplanpattern from 10.1.1.237 and raw_floorplan_unhandled
