@@ -10,17 +10,17 @@ Imgid list :https://docs.google.com/spreadsheets/d/17kbYsAKmio_3x81Sk5uBLO2JiMBl
 ### Step two sql:
 
 ```sql
-SELECT TOP (1000) [imgid]
+SELECT [imgid]
       ,[region]
       ,[AplusScope]
       ,[hma_c]
       ,[EstateName_c]
-	  ,''
       ,[PhaseName_c]
       ,[BuildingName_c]
       ,[FloorDesc_e]
       ,[unit_cnt]
   FROM [PlanFramework].[dbo].[FloorplanStat]
-  where estatename_c = N'曉麗苑'
+  where estatename_c in (N'家壹') or buildingname_c in (N'家壹')
+  order by estatename_c, phasename_c, buildingname_c
 ```
 
